@@ -17,20 +17,24 @@ function App() {
     function start() {
       gapi.client.init({
         clientId: clientId,
-        scope: ""
+        scope: "email"
       }).then(() => {
-        const isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
-        setIsLoggedIn(isSignedIn);
-
-        if (isSignedIn) {
-          const currentUser = gapi.auth2.getAuthInstance().currentUser.get();
-          const profile = currentUser.getBasicProfile();
+        const authInstance = gapi.auth2.getAuthInstance();
+        setIsLoggedIn(authInstance.isSignedIn.get());
+        authInstance.isSignedIn.listen((signedIn) => {
+          setIsLoggedIn(signedIn);
+        });
+        const user = authInstance.currentUser.get();
+        if (user.isSignedIn()) {
+          const profile = user.getBasicProfile();
           setUsername(profile.getName());
           setEmail(profile.getEmail());
         }
+      }).catch((error) => {
+        console.error('Error al inicializar gapi:', error);
       });
     }
-
+  
     gapi.load('client:auth2', start);
   }, []);
 
