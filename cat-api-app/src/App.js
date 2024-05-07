@@ -68,18 +68,18 @@ function App() {
     });
   };
 
-  const sendDataToBackend = async (option, username, email, date) => {
+  const sendDataToBackend = async (option, name, email, date) => {
     try {
-      const response = await fetch('http://localhost:8080/api/saveUserData', {
+      const response = await fetch('http://localhost:8080/saveUserData', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           option: option,
-          username: username,
+          name: name,
           email: email,
-          date: date,
+          date: date.toISOString(), // Convertir a formato ISO 8601
           timestamp: new Date().toISOString(),
         }),
       });
