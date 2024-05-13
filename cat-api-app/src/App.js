@@ -10,8 +10,6 @@ const clientId = process.env.REACT_APP_CLIENT_ID;
 function App() {
   const [images, setImages] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
 
   useEffect(() => {
     function start() {
@@ -24,12 +22,6 @@ function App() {
         authInstance.isSignedIn.listen((signedIn) => {
           setIsLoggedIn(signedIn);
         });
-        const user = authInstance.currentUser.get();
-        if (user.isSignedIn()) {
-          const profile = user.getBasicProfile();
-          setUsername(profile.getName());
-          setEmail(profile.getEmail());
-        }
       }).catch((error) => {
         console.error('Error al inicializar gapi:', error);
       });
@@ -40,17 +32,27 @@ function App() {
 
   const handleViewOneImage = async () => {
     if (isLoggedIn) {
+      const user = gapi.auth2.getAuthInstance().currentUser.get();
+      const profile = user.getBasicProfile();
+      const name = profile.getName();
+      const email = profile.getEmail();
+      const date = new Date();
       const data = await getImages();
       setImages(data);
-      sendDataToBackend('Ver 1 Imagen', username, email, new Date());
+      sendDataToBackend('Ver 1 Imagen', name, email, date);
     }
   };
 
   const handleViewTenImages = async () => {
     if (isLoggedIn) {
+      const user = gapi.auth2.getAuthInstance().currentUser.get();
+      const profile = user.getBasicProfile();
+      const name = profile.getName();
+      const email = profile.getEmail();
+      const date = new Date();
       const data = await getImagesLimit(10);
       setImages(data);
-      sendDataToBackend('Ver 10 Imágenes', username, email, new Date());
+      sendDataToBackend('Ver 10 Imágenes', name, email, date);
     }
   };
 
@@ -63,14 +65,13 @@ function App() {
   const handleLogout = () => {
     gapi.auth2.getAuthInstance().signOut().then(() => {
       setIsLoggedIn(false);
-      setUsername('');
-      setEmail('');
+      setImages([]);
     });
   };
 
   const sendDataToBackend = async (option, name, email, date) => {
     try {
-      const response = await fetch('http://localhost:8080/saveUserData', {
+      const response = await fetch('http://localhost:8081/saveUserData', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +80,7 @@ function App() {
           option: option,
           name: name,
           email: email,
-          date: date.toISOString(), // Convertir a formato ISO 8601
+          date: date.toISOString(),
           timestamp: new Date().toISOString(),
         }),
       });
@@ -96,8 +97,7 @@ function App() {
 
   return (
     <div className="App">
-      <LoginButton onClick={handleLogin} />
-      <LogoutButton onClick={handleLogout} />
+      {isLoggedIn ? <LogoutButton onClick={handleLogout} /> : <LoginButton onClick={handleLogin} />}
       <h1>Ver Imágenes</h1>
       <button onClick={handleViewOneImage} disabled={!isLoggedIn}>Ver 1 Imagen</button>
       <button onClick={handleViewTenImages} disabled={!isLoggedIn}>Ver 10 Imágenes</button>
@@ -111,7 +111,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
