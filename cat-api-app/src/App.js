@@ -65,7 +65,7 @@ function App() {
   const handleLogout = () => {
     gapi.auth2.getAuthInstance().signOut().then(() => {
       setIsLoggedIn(false);
-      setImages([]);
+      setImages([]); // Limpiar las imágenes al hacer logout
     });
   };
 
@@ -97,15 +97,24 @@ function App() {
 
   return (
     <div className="App">
-      {isLoggedIn ? <LogoutButton onClick={handleLogout} /> : <LoginButton onClick={handleLogin} />}
-      <h1>Ver Imágenes</h1>
-      <button onClick={handleViewOneImage} disabled={!isLoggedIn}>Ver 1 Imagen</button>
-      <button onClick={handleViewTenImages} disabled={!isLoggedIn}>Ver 10 Imágenes</button>
-      <div className="ImageContainer">
-        {images.map((image, index) => (
-          <img key={index} src={image.url} alt={`Image ${index}`} />
-        ))}
-      </div>
+      {!isLoggedIn ? (
+        <div>
+          <h1>Por favor, inicie sesión</h1>
+          <LoginButton onClick={handleLogin} />
+        </div>
+      ) : (
+        <div>
+          <h1>Ver Imágenes</h1>
+          <LogoutButton onClick={handleLogout} />
+          <button onClick={handleViewOneImage}>Ver 1 Imagen</button>
+          <button onClick={handleViewTenImages}>Ver 10 Imágenes</button>
+          <div className="ImageContainer">
+            {images.map((image, index) => (
+              <img key={index} src={image.url} alt={`Image ${index}`} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
