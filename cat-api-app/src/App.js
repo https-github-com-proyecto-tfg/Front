@@ -10,9 +10,9 @@ const clientId = process.env.REACT_APP_CLIENT_ID;
 
 function App() {
   const [images, setImages] = useState([]);
-  const [savedImages, setSavedImages] = useState([]); // Estado para almacenar las imágenes guardadas
+  const [savedImages, setSavedImages] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [view, setView] = useState('home'); // Estado para controlar la vista activa
+  const [view, setView] = useState('home');
 
   useEffect(() => {
     function start() {
@@ -33,37 +33,35 @@ function App() {
     gapi.load('client:auth2', start);
   }, []);
 
-  
   const handleLogin = () => {
     gapi.auth2.getAuthInstance().signIn().then(() => {
       setIsLoggedIn(true);
-      setSavedImages([]); // Limpiar las imágenes guardadas al iniciar sesión
-      handleViewSavedImages(); // Cargar las imágenes guardadas nuevamente después de iniciar sesión
+      setSavedImages([]);
+      handleViewSavedImages();
     });
   };
-  
 
   const handleLogout = () => {
     gapi.auth2.getAuthInstance().signOut().then(() => {
       setIsLoggedIn(false);
-      setImages([]); // Limpiar las imágenes al hacer logout
-      setSavedImages([]); // Limpiar las imágenes guardadas al hacer logout
-      setView('home'); // Volver a la vista de inicio
+      setImages([]);
+      setSavedImages([]);
+      setView('home');
     });
   };
 
   const handleViewOneImage = async () => {
     if (isLoggedIn) {
-      setImages([]); // Limpiar las imágenes antes de cargar nuevas
+      setImages([]);
       const data = await getImages();
       setImages(data);
       await sendDataToBackend('Ver una imagen');
     }
   };
-  
+
   const handleViewTenImages = async () => {
     if (isLoggedIn) {
-      setImages([]); // Limpiar las imágenes antes de cargar nuevas
+      setImages([]);
       const data = await getImagesLimit(10);
       setImages(data);
       await sendDataToBackend('Ver 10 imágenes');
@@ -90,9 +88,35 @@ function App() {
         const response = await fetch(`http://localhost:8081/getUserImages?email=${email}`);
         const data = await response.json();
         setSavedImages(data);
-        setView('savedImages'); // Cambiar a la vista de imágenes guardadas
+        setView('savedImages');
       } catch (error) {
         console.error('Error al obtener las imágenes guardadas:', error.message);
+      }
+    }
+  };
+
+  const handlePayForImages = async () => {
+    if (isLoggedIn) {
+      const user = gapi.auth2.getAuthInstance().currentUser.get();
+      const profile = user.getBasicProfile();
+      const email = profile.getEmail();
+      try {
+        const response = await fetch('http://localhost:8081/payForImages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al pagar las imágenes');
+        }
+
+        setSavedImages([]); // Limpiar las imágenes guardadas después de pagar
+        setView('savedImages'); // Mantener la vista de imágenes guardadas
+      } catch (error) {
+        console.error('Error al pagar las imágenes:', error.message);
       }
     }
   };
@@ -153,12 +177,19 @@ function App() {
           {view === 'savedImages' && (
             <div className="SavedImagesContainer">
               <h2>Estas son sus imágenes en la cesta:</h2>
-              {savedImages.map((imageUrl, index) => (
-                <div key={index}>
-                  <img src={imageUrl} alt={`Saved Image ${index}`} />
-                </div>
-              ))}
-              <button onClick={() => setView('home')}>Volver</button> {/* Botón para volver a la vista principal */}
+              {savedImages.length === 0 ? (
+                <p>No tienes nada pendiente de pagar</p>
+              ) : (
+                savedImages.map((imageUrl, index) => (
+                  <div key={index}>
+                    <img src={imageUrl} alt={`Saved Image ${index}`} />
+                  </div>
+                ))
+              )}
+              {savedImages.length > 0 && (
+                <button onClick={handlePayForImages}>Pagar</button>
+              )}
+              <button onClick={() => setView('home')}>Volver</button>
             </div>
           )}
         </div>
