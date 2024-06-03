@@ -1,70 +1,120 @@
-# Getting Started with Create React App
+# Proyecto de Gestión de Imágenes
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Ciclo**: Desarrollo de Aplicaciones Web (DAW)  
+**Alumno**: [Noelia Tinajero Ortiz]
 
-## Available Scripts
+## Índice
 
-In the project directory, you can run:
+1. [Introducción](#introducción)
+2. [Funcionalidades del Proyecto y Tecnologías Utilizadas](#funcionalidades-del-proyecto-y-tecnologías-utilizadas)
+3. [Guía de Instalación](#guía-de-instalación)
+4. [Guía de Uso](#guía-de-uso)
+5. [Enlace a la Documentación](#enlace-a-la-documentación)
+6. [Enlace a Figma de la Interfaz](#enlace-a-figma-de-la-interfaz)
+7. [Conclusión](#conclusión)
+8. [Contribuciones, Agradecimientos y Referencias](#contribuciones-agradecimientos-y-referencias)
+9. [Licencias](#licencias)
+10. [Contacto](#contacto)
 
-### `npm start`
+## Introducción
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Descripción del Proyecto**: Este proyecto es una aplicación de React que permite a los usuarios iniciar sesión con Google, ver imágenes, seleccionar imágenes y pagar por las imágenes seleccionadas. Utiliza la API de Google para la autenticación y una API backend para gestionar las imágenes y los datos del usuario.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**Justificación**: La necesidad de una aplicación sencilla y eficiente para gestionar imágenes de manera segura y rápida.
 
-### `npm test`
+**Objetivos**: 
+- Facilitar la gestión y visualización de imágenes.
+- Implementar un sistema de autenticación seguro.
+- Proveer una interfaz intuitiva y fácil de usar.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Motivación**: Crear una herramienta útil para usuarios que necesitan gestionar grandes cantidades de imágenes de forma organizada y segura.
 
-### `npm run build`
+## Funcionalidades del Proyecto y Tecnologías Utilizadas
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Funcionalidades
+- Inicio de sesión con Google.
+- Visualización de imágenes.
+- Selección de imágenes.
+- Almacenamiento y pago por imágenes seleccionadas.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Tecnologías Utilizadas
+- **React**: Biblioteca principal para la construcción de la interfaz.
+- **gapi-script**: Script para cargar y usar la API de Google.
+- **dotenv**: Para cargar variables de entorno desde un archivo `.env`.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Guía de Instalación
 
-### `npm run eject`
+1. Clona este repositorio en tu máquina local:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    ```bash
+    git clone https://github.com/https-github-com-proyecto-tfg/Front.git
+    cd tu-repositorio
+    ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. Instala las dependencias del proyecto:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+    ```bash
+    npm install
+    ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+    o si prefieres usar yarn:
 
-## Learn More
+    ```bash
+    yarn install
+    ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. Crea un archivo `.env` en la raíz del proyecto con el siguiente contenido, reemplazando `YOUR_GOOGLE_CLIENT_ID` con el ID de cliente de OAuth2 de Google:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    ```env
+    REACT_APP_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+    ```
 
-### Code Splitting
+## Guía de Uso
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Para iniciar la aplicación en modo de desarrollo, ejecuta:
 
-### Analyzing the Bundle Size
+    ```bash
+    npm start
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+    o si prefieres usar yarn:
 
-### Making a Progressive Web App
+    ```bash
+    yarn start
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+La aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
 
-### Advanced Configuration
+1. **Iniciar sesión**: Inicia sesión con tu cuenta de Google.
+2. **Ver imágenes**: Selecciona entre ver una imagen o diez imágenes.
+3. **Seleccionar imágenes**: Haz clic en las imágenes para seleccionarlas y añadirlas a tu cesta.
+4. **Pagar por imágenes**: Ve a la cesta y realiza el pago por las imágenes seleccionadas.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Enlace a la Documentación
 
-### Deployment
+[Documentación del Proyecto](cat-api-app/CatApi.docx)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Enlace a Figma de la Interfaz
 
-### `npm run build` fails to minify
+[Diseño de Interfaz en Figma](https://www.figma.com/design/nVoF7Y4tbyNGQYX8rg9EpD/CatApi?node-id=0-1&t=yL39z6aUv5cEn1WC-0)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Conclusión
+
+Este proyecto demuestra cómo integrar autenticación con Google y gestión de imágenes en una aplicación React. La aplicación es fácil de usar y proporciona una manera eficiente de gestionar imágenes.
+
+## Contribuciones, Agradecimientos y Referencias
+
+Agradecimientos especiales a mis profesores y compañeros que ayudaron en la realización de este proyecto.
+
+- [React Documentation](https://reactjs.org/docs/getting-started.html)
+- [Google API Documentation](https://developers.google.com/identity/sign-in/web/sign-in)
+
+## Licencias
+
+Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+
+## Contacto
+
+**Nombre**: Noelia Tinajero Ortiz  
+**Email**: noelia.tinajero@a.vedrunasevillasj.es  
+**GitHub**: [NoeliaTinajeroOrtiz](https://github.com/NoeliaTinajeroOrtiz)
