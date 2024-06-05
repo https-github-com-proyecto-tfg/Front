@@ -92,7 +92,7 @@ La aplicación estará disponible en [http://localhost:3000](http://localhost:30
 
 ## Enlace a la Documentación
 
-[Documentación del Proyecto](cat-api-app/CatApi.docx)
+[Documentación del Proyecto](CatApi.pdf)
 
 ## Enlace a Figma de la Interfaz
 
