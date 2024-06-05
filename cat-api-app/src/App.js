@@ -113,6 +113,9 @@ function App() {
       const email = profile.getEmail();
       const date = new Date();
       await sendDataToBackend('Imagen Seleccionada', name, email, date, imageUrl);
+
+      // Actualizar estadísticas del usuario inmediatamente después de añadir una imagen a la cesta
+      await fetchUserStatistics(email);
     }
   };
 
@@ -176,6 +179,9 @@ function App() {
 
         setSavedImages([]); // Limpiar las imágenes guardadas después de pagar
         setView('savedImages'); // Mantener la vista de imágenes guardadas
+
+        // Actualizar estadísticas del usuario inmediatamente después de pagar las imágenes
+        await fetchUserStatistics(email);
       } catch (error) {
         console.error('Error al pagar las imágenes:', error.message);
       }
@@ -183,10 +189,18 @@ function App() {
   };
 
   // Función para eliminar una imagen del carrito de compras
-  const handleRemoveFromCart = (index) => {
+  const handleRemoveFromCart = async (index) => {
     const newSavedImages = [...savedImages];
     newSavedImages.splice(index, 1);
     setSavedImages(newSavedImages);
+
+    // Actualizar estadísticas del usuario inmediatamente después de eliminar una imagen de la cesta
+    if (isLoggedIn) {
+      const user = gapi.auth2.getAuthInstance().currentUser.get();
+      const profile = user.getBasicProfile();
+      const email = profile.getEmail();
+      await fetchUserStatistics(email);
+    }
   };
 
   const handleShowUserProfile = () => {
@@ -230,10 +244,10 @@ function App() {
         </div>
       ) : (
         <div>
-          <Menu handleLogout={handleLogout} setView={setView} />
           {view === 'home' && (
             <>
               <h1>Ver Imágenes</h1>
+              <LogoutButton onClick={handleLogout} />
               <button onClick={handleViewOneImage}>Ver 1 Imagen</button>
               <button onClick={handleViewTenImages}>Ver 10 Imágenes</button>
               <button onClick={handleViewSavedImages}>Ver Cesta</button>
